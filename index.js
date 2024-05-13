@@ -25,32 +25,49 @@ db.connect(function (err) {
     console.log(" database Connected!");
 });
 //register
-app.get("/register", (req, res) =>{
+app.get("/register", (req, res) => {
     res.sendFile(__dirname + '/register.html');
 });
 app.post('/register', (req, res) => {
-    const { username, password } = req.body;
-    const sql = `INSERT INTO users (username,email, password) VALUES (?, ?)`;
-    db.query(sql, [username, password], (err, result) => {
-        if (err) {
-            throw err;
+    const { username, email, password } = req.body;
+    const emailCheckQuery = `SELECT COUNT(*) AS email_count FROM users WHERE email = ?`;
+    db.query(emailCheckQuery, [email], (error, results) => {
+        if (error) {
+            console.error('Error executing email check query: ' + error);
+            res.status(500).send('Internal server error');
+            return;
         }
-        res.send('Registration successful! <a href="/login">Login</a>');
-    });
+
+        const emailCount = results[0].email_count;
+
+        if (emailCount > 0) {
+            res.status(400).send('Email is already registered');
+            return;
+        }
+        else{
+        const sql = `INSERT INTO users (username,email, password) VALUES (?,?,?)`;
+        db.query(sql, [username, email, password], (err, result) => {
+            if (err) {
+                throw err;
+            }
+            res.send('Registration successful! <a href="/">Login</a>');
+        });
+    }
+    })
 });
-//login
+//logout
 
 app.get('/logout', (req, res) => {
     req.session.destroy((err) => {
         if (err) {
             throw err;
         }
-        res.redirect('/login');
+        res.redirect('/');
     });
 });
-//logout
+//login
 
-app.get("/", (req, res) =>{
+app.get("/", (req, res) => {
     res.sendFile(__dirname + '/login.html');
 })
 app.post('/', (req, res) => {
@@ -83,7 +100,7 @@ app.post('/', (req, res) => {
                         res.send('Your account has been blocked due to multiple incorrect login attempts.');
                     });
                 }
-                else{
+                else {
                     db.query('UPDATE users SET login_attempts = ? WHERE id = ?', [loginAttempts, user.id], (updateErr) => {
                         if (updateErr) {
                             throw updateErr;

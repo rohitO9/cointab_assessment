@@ -17,7 +17,8 @@
         }
 
         .container {
-            background-color: #fff;
+            background-color: #ecbaba;
+            margin: 40px;
             padding: 20px;
             border-radius: 8px;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
@@ -29,10 +30,12 @@
         }
 
         .form-group {
-            margin-bottom: 20px;
+            width: 280px;
+            padding: 5px;
         }
 
         .form-group label {
+            margin-bottom: 0px;
             display: block;
             margin-bottom: 8px;
         }
@@ -49,7 +52,7 @@
             padding: 10px 20px;
             border: none;
             border-radius: 5px;
-            background-color: #007bff;
+            background-color: #c82a0a;
             color: #fff;
             cursor: pointer;
         }
@@ -64,16 +67,16 @@
         <h2>User Registration</h2>
         <form action="/register" method="post">
             <div class="form-group">
-                <label for="username">Username:</label><br>
-                <input type="text" id="username" name="username" required><br><br>
+                <label for="username">Username:</label>
+                <input type="text" id="username" name="username" required placeholder="Enter your Username">
             </div>
             <div class="form-group">
-                <label for="email">Email:</label><br>
-                <input type="email" id="email" name="email" required><br><br>
+                <label for="email">Email:</label>
+                <input type="email" id="email" name="email" placeholder="Enter your Email" required>
             </div>
             <div class="form-group">
-                <label for="password">Password:</label><br>
-                <input type="password" id="password" name="password" required><br><br>
+                <label for="password">Password:</label>
+                <input type="password" id="password" name="password" placeholder="Enter Your Password" required>
             </div>
             <div class="form-group">
                 <input type="submit" value="Register">
